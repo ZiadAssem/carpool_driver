@@ -1,8 +1,10 @@
+import 'package:carpool_driver/classes_updated/triprequest_class.dart';
 import 'package:carpool_driver/controller/signin_controller.dart';
 import 'package:carpool_driver/firebase/authentication.dart';
 import 'package:carpool_driver/firebase/database.dart';
 import 'package:carpool_driver/view/add_trips.dart';
 import 'package:carpool_driver/view/signin.dart';
+import 'package:carpool_driver/view/trip_requests.dart';
 import 'package:carpool_driver/view/view_trips.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +18,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await Authentication.instance.signInWithEmailAndPassword('test@eng.asu.edu.eg','test1234');
-        await DatabaseHelper.instance.getCurrentUser();
-
+  await Authentication.instance.signInWithEmailAndPassword('testdriver@eng.asu.edu.eg','test1234');
+  await DatabaseHelper.instance.getCurrentUser();
 
    runApp(const MainApp());
 }
@@ -66,7 +67,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: ViewTrips(),
+      home: ViewTripRequests(),
     );
   }
 }

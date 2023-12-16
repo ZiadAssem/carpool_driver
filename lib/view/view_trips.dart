@@ -54,7 +54,12 @@ class _ViewTripsPageState extends State<ViewTrips> {
           children: [
             Text(trips[index].date),
             Text(trips[index].gate),
-            Text(trips[index].status.toString()),
+            Text(trips[index].status.toString(),
+        
+
+            ),
+            
+            
           ],
         ),
         leading:

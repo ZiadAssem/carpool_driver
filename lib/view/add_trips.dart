@@ -46,12 +46,12 @@ class _AddTripsPageState extends State<AddTripsPage> {
             SizedBox(height: 30),
             Card(
               shape: RoundedRectangleBorder(
-                  side: BorderSide(color: Colors.black, width: 0.7),
+                  side: const BorderSide(color: Colors.black, width: 0.7),
                   borderRadius: BorderRadius.circular(30.0)),
               elevation: 10,
               child: Row(
                 children: [
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.all(20),
                     child: Text("Route"),
                   ),
@@ -137,11 +137,10 @@ class _AddTripsPageState extends State<AddTripsPage> {
               _seatsController,
               null,
             ),
-            SizedBox(
+            const SizedBox(
               height: 60,
             ),
-            resuableButton(context, 'Add Trip', 200.0, () {
-              _validateTripData();            }),
+            resuableButton(context, 'Add Trip', 200.0, () {_validateTripData();}),
           ],
         ),
       ),

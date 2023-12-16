@@ -187,6 +187,7 @@ class DatabaseHelper {
   }
 
   void addTripToDb(key, route, destination, data) async {
+    route.replaceAll(' ', '');
     await reference
         .child("Routes")
         .child(route)
@@ -196,9 +197,9 @@ class DatabaseHelper {
   }
 
   void addTripToDriver(
-      String generatedKey, Map<String, dynamic> data, ) {
-
-
+    String generatedKey,
+    Map<String, dynamic> data,
+  ) {
     reference
         .child("Users")
         .child(Authentication.instance.currentUserId)
@@ -213,15 +214,96 @@ class DatabaseHelper {
         .child("Users")
         .child(Authentication.instance.currentUserId)
         .child("driverTrips")
-      
         .once();
     Map<dynamic, dynamic> values =
         event.snapshot.value as Map<dynamic, dynamic>;
-        print(values);
-      values.values.forEach((value) {
-        driverTrips.add(Trip.fromJson(value));
-      });
+    print(values);
+    values.values.forEach((value) {
+      driverTrips.add(Trip.fromJson(value));
+    });
 
     return driverTrips;
+  }
+
+  getDriverTripRequests() async {
+    List<TripRequest> tripRequests = [];
+    final driverId = Authentication.instance.currentUserId;
+    final event = await reference.child('Users').child(driverId).child('TripRequests').once();
+    if (event.snapshot.value!=null) {
+  Map<dynamic, dynamic> values =
+      event.snapshot.value as Map<dynamic, dynamic>;
+  values.values.forEach((element) {
+    tripRequests.add(TripRequest.fromJson(element));
+  });
+}
+    return tripRequests;
+  }
+
+  acceptTripRequest(String requestId, String userId,String tripId,String pickup, String destination) async {
+    String tripType;
+    String route;
+
+    if(destination =='Gate 4' || destination == 'Gate 3'){
+      tripType = 'CampusTrips';
+      route = pickup + 'Route';
+      route.replaceAll(' ', '');
+    }
+    else{
+      tripType = 'HomeTrips';
+      route = destination + 'Route';
+      route.replaceAll(' ', '');
+    }
+    print('tripType: $tripType');
+    print('route: $route');
+
+    await reference
+        .child('Users')
+        .child(Authentication.instance.currentUserId)
+        .child('TripRequests')
+        .child(requestId)
+        .child('status')
+        .set('accepted');
+    await reference
+        .child('TripRequests')
+        .child(userId)
+        .child(requestId)
+        .child('status')
+        .set('accepted');
+    await reference 
+        .child('Routes')
+        .child(route)
+        .child(tripType)
+        .child(tripId)
+        .child('numberOfSeatsLeft')
+        .set(ServerValue.increment(-1));
+    
+  }
+
+  void declineTripRequest(String requestId, String userId) async {
+    await reference
+        .child('Users')
+        .child(Authentication.instance.currentUserId)
+        .child('TripRequests')
+        .child(requestId)
+        .set(null);
+    await reference
+        .child('TripRequests')
+        .child(userId)
+        .child(requestId)
+        .child('status')
+        .set('declined');
+  }
+
+  void deleteRequest(String requestId, String user)async {
+
+        await reference
+        .child('Users')
+        .child(Authentication.instance.currentUserId)
+        .child('TripRequests')
+        .child(requestId)
+        .set(null);
+
+
+
   }
 }

@@ -3,7 +3,7 @@ class Trip {
   String tripKey;
   String gate;
   int price;
-  String driver;
+  String driverId;
   int numberOfSeatsLeft;
   String status;
   String date;
@@ -15,20 +15,21 @@ class Trip {
       // required this.route,
       required this.tripKey,
       required this.gate,
-      required this.driver,
+      required this.driverId,
       required this.numberOfSeatsLeft,
       required this.price,
       required this.status,
       required this.date,
       required this.route,
-      required this.destination});
+      required this.destination}
+      );
 
   factory Trip.fromJson(json) {
     return Trip(
         // route: Route.fromJson(json['route']),
         tripKey: json['tripKey'],
         gate: json['gate'],
-        driver: json['driver'],
+        driverId: json['driverId'],
         numberOfSeatsLeft: json['numberOfSeatsLeft'],
         price: json['price'],
         status: json['status'],
@@ -42,7 +43,7 @@ class Trip {
       // 'route': route,
       'tripKey': tripKey,
       'gate': gate,
-      'driver': driver,
+      'driverId': driverId,
       'numberOfSeatsLeft': numberOfSeatsLeft,
       'price': price,
       'status': status,
@@ -60,7 +61,7 @@ class Trip {
 //   //  required route,
 //     required tripKey,
 //     required gate,
-//     required driver,
+//     required driverId,
 //     required numberOfSeatsLeft,
 //     required price,
 //     required status,
@@ -70,7 +71,7 @@ class Trip {
 //         //  route: route,
 //         tripKey: tripKey,
 //           gate: gate,
-//           driver: driver,
+//           driverId: driverId,
 //           numberOfSeatsLeft: numberOfSeatsLeft,
 //           price: price,
 //           status: status,
@@ -83,7 +84,7 @@ class Trip {
 //  //   required route,
 //  required tripKey,
 //     required gate,
-//     required driver,
+//     required driverId,
 //     required numberOfSeatsLeft,
 //     required price,
 //     required status,
@@ -92,7 +93,7 @@ class Trip {
 //     //      route: route,
 //           tripKey: tripKey,
 //           gate: gate,
-//           driver: driver,
+//           driverId: driverId,
 //           numberOfSeatsLeft: numberOfSeatsLeft,
 //           price: price,
 //           status: status,
