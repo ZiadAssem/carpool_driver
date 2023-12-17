@@ -45,5 +45,31 @@ mixin ValidationMixin {
     return null;
   }
 
+  String? validatePrice(String? value) {
+    RegExp numeric = RegExp(r'^[0-9]+$');
+    if (value!.isEmpty) {
+      return 'Please enter a price';
+    }
+    if (numeric.hasMatch(value)) {
+      return null;
+    }
+    return 'Please enter digits only';
+  }
+
+  String? validateSeats(String? value) {
+    RegExp numeric = RegExp(r'^[0-9]+$');
+    if (value!.isEmpty) {
+      return 'Please enter number of seats';
+    }
+    if(int.parse(value)>4 || int.parse(value)<1){
+      return 'Number of seats should be less than 5 and more than 0';
+
+    }
+    if (numeric.hasMatch(value)) {
+      return null;
+    }
+    return 'Please enter digits only';
+  }
+
 
 }

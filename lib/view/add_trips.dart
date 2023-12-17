@@ -1,5 +1,6 @@
 import 'package:carpool_driver/controller/addtrip_controller.dart';
 import 'package:carpool_driver/reusable_widgets.dart';
+import 'package:carpool_driver/validation_mixin.dart';
 import 'package:flutter/material.dart';
 
 import '../classes_updated/routes_class.dart' as R;
@@ -12,7 +13,7 @@ class AddTripsPage extends StatefulWidget {
   State<AddTripsPage> createState() => _AddTripsPageState();
 }
 
-class _AddTripsPageState extends State<AddTripsPage> {
+class _AddTripsPageState extends State<AddTripsPage> with ValidationMixin {
   final _formKey = GlobalKey<FormState>();
   final _dateController = TextEditingController();
   final _priceController = TextEditingController();
@@ -94,9 +95,7 @@ class _AddTripsPageState extends State<AddTripsPage> {
                           });
                         }),
                   ]),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.2,
-                  ),
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.2),
                   Column(
                     children: [
                       _customRadioButton(
@@ -123,35 +122,45 @@ class _AddTripsPageState extends State<AddTripsPage> {
             // reusableTextField(
             //     'Date', Icons.date_range, false, _dateController, null, false),
             _datePickerField(),
+            Text('Note: You can only add trips for the following day'),
             reusableTextField(
               'Price',
               Icons.money,
               false,
               _priceController,
-              null,
+              validatePrice,
             ),
             reusableTextField(
               'Seats',
               Icons.event_seat,
               false,
               _seatsController,
-              null,
+              validateSeats,
             ),
             const SizedBox(
               height: 60,
             ),
-            resuableButton(context, 'Add Trip', 200.0, () {_validateTripData();}),
+            resuableButton(context, 'Add Trip', 200.0, () {
+              _validateTripData();
+            }),
           ],
         ),
       ),
     );
   }
 
-  _validateTripData(){
-    if(_formKey.currentState!.validate()){
-       AddTripController.addTrip(context ,_selectedRoute, _selectedOption,_selectedGate, _dateController.text,int.parse( _priceController.text), int.parse(_seatsController.text));
+  _validateTripData() {
+    if (_formKey.currentState!.validate()) {
+      AddTripController.addTrip(
+          context,
+          _selectedRoute,
+          _selectedOption,
+          _selectedGate,
+          _dateController.text,
+          int.parse(_priceController.text),
+          int.parse(_seatsController.text));
       _formKey.currentState!.reset();
-    
+      setState(() {});
     }
   }
 
@@ -187,15 +196,32 @@ class _AddTripsPageState extends State<AddTripsPage> {
   }
 
   Future<void> _selectDate(BuildContext context) async {
-    DateTime pickedDate = DateTime.now();
-    DateTime? selectedDate = await showDatePicker(
-      context: context,
-      initialDate: pickedDate,
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2101),
-    );
+    DateTime now = DateTime.now();
+    DateTime pickedDate = now;
 
-    if (selectedDate != null && selectedDate != pickedDate) {
+    DateTime selectedDate = now;
+
+    // DateTime? selectedDate = await showDatePicker(
+    //   context: context,
+    //   initialDate: pickedDate,
+    //   firstDate: DateTime.now(),
+    //   lastDate: DateTime(2101),
+    // );
+
+    if (_selectedOption == 'toCampus') {
+      if (now.hour < 22) {
+        selectedDate = now.add(Duration(days: 1));
+      } else {
+        selectedDate = now.add(Duration(days: 2));
+      }
+    } else if (_selectedOption == 'toHome') {
+      if (now.hour < 13) {
+        selectedDate = now;
+      } else {
+        selectedDate = now.add(Duration(days: 1));
+      }
+    }
+
       setState(() {
         pickedDate = selectedDate;
         _dateController.text = pickedDate
@@ -204,7 +230,6 @@ class _AddTripsPageState extends State<AddTripsPage> {
             .split(' ')[0]; // Format the date as needed
         print(_dateController.text);
       });
-    }
   }
 
   Widget _customRadioButton({
@@ -231,7 +256,6 @@ class _AddTripsPageState extends State<AddTripsPage> {
       ],
     );
   }
-
 }
 
 class _RoutesDropDown extends StatelessWidget {

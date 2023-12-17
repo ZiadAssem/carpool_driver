@@ -16,6 +16,9 @@ class AddTripController {
 
     print("User ID is $userName");
     destination = destination.replaceAll('to', '');
+    route = route.replaceAll(' ', '');
+    print('Updated Route is $route');
+
     final updatedRoute = '$route' 'Route';
     final updatedDestination = '$destination' + 'Trips';
     print('Updated Route is $updatedRoute');

@@ -10,19 +10,18 @@ class Trip {
   String route;
   String destination;
 
-  Trip(
-      {
-      // required this.route,
-      required this.tripKey,
-      required this.gate,
-      required this.driverId,
-      required this.numberOfSeatsLeft,
-      required this.price,
-      required this.status,
-      required this.date,
-      required this.route,
-      required this.destination}
-      );
+  Trip({
+    required this.tripKey,
+    required this.gate,
+    required this.driverId,
+    required this.numberOfSeatsLeft,
+    required this.price,
+    required this.status,
+    required this.date,
+    required this.route,
+    required this.destination,
+    
+  });
 
   factory Trip.fromJson(json) {
     return Trip(
